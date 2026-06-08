@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trung tâm báo cáo Kết quả thi thẩm định Day of AI</title>
+<style>
+:root{
+	--bg1:#f0f9ff;
+	--bg2:#ecfeff;
+	--card:#ffffff;
+	--ink:#0f172a;
+	--sub:#475569;
+	--line:#cbd5e1;
+	--action:#0f766e;
+}
+*{box-sizing:border-box}
+body{
+	margin:0;
+	min-height:100vh;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	background:radial-gradient(1200px 700px at 10% 10%,var(--bg2),transparent 60%),linear-gradient(135deg,var(--bg1),#ffffff);
+	color:var(--ink);
+	font-family:"Segoe UI",Arial,sans-serif;
+	padding:24px;
+}
+.card{
+	width:min(680px,100%);
+	background:var(--card);
+	border:1px solid var(--line);
+	border-radius:18px;
+	box-shadow:0 18px 40px rgba(15,23,42,.10);
+	padding:28px;
+}
+h1{font-size:24px;margin:0 0 10px}
+p{margin:0 0 18px;color:var(--sub);line-height:1.65}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+select,button{
+	height:44px;
+	border-radius:10px;
+	border:1px solid var(--line);
+	font-size:15px;
+}
+select{
+	flex:1 1 380px;
+	padding:0 12px;
+	background:#fff;
+	color:var(--ink);
+}
+button{
+	flex:0 0 auto;
+	padding:0 16px;
+	background:var(--action);
+	border-color:var(--action);
+	color:#fff;
+	font-weight:600;
+	cursor:pointer;
+}
+button:hover{filter:brightness(1.05)}
+.hint{font-size:13px;color:#64748b;margin-top:12px}
+</style>
+</head>
+<body>
+<div class="card">
+	<h1>Báo cáo phân tích kết quả thi thẩm định Day of AI</h1>
+	<p>Chọn đợt cần xem rồi bấm <b>Đọc báo cáo</b>. Các báo cáo trong tương lai sẽ được cập nhật sau.</p>
+	<div class="row">
+		<select id="reportPeriod" aria-label="Chọn đợt báo cáo"></select>
+		<button id="openReportBtn" type="button">Đọc báo cáo</button>
+	</div>
+	<div class="hint" id="periodHint"></div>
+</div>
+
+<script>
+const REPORT_PERIODS=[
+	{
+		id:'2026-dot-1',
+		label:'Đợt 1 năm 2026 - Ngày 19/04/2026',
+		url:'BaoCao_Dot01.html'
+	},
+	{
+		id:'2026-dot-2',
+		label:'Đợt 2 năm 2026 - Ngày 18/05/2026',
+		url:'BaoCao_Dot02.html'
+	}
+];
+
+const selectEl=document.getElementById('reportPeriod');
+const hintEl=document.getElementById('periodHint');
+const openBtn=document.getElementById('openReportBtn');
+
+REPORT_PERIODS.forEach((p,idx)=>{
+	const opt=document.createElement('option');
+	opt.value=p.id;
+	opt.textContent=p.label;
+	if(idx===0)opt.selected=true;
+	selectEl.appendChild(opt);
+});
+
+function selectedPeriod(){
+	return REPORT_PERIODS.find(p=>p.id===selectEl.value)||REPORT_PERIODS[0];
+}
+
+function refreshHint(){
+	const p=selectedPeriod();
+	hintEl.textContent=p.url?'Sẵn sàng mở báo cáo của đợt đã chọn.':'Báo cáo chưa có sẵn, sẽ được cập nhật sau.';
+}
+
+openBtn.addEventListener('click',()=>{
+	const p=selectedPeriod();
+	if(!p.url){
+		alert('Đợt khảo sát này chưa có link báo cáo. Sẽ được cập nhật sau.');
+		return;
+	}
+	window.location.href=p.url;
+});
+
+selectEl.addEventListener('change',refreshHint);
+refreshHint();
+</script>
+</body>
+</html>
